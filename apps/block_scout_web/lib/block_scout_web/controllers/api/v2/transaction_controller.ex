@@ -6,7 +6,7 @@ defmodule BlockScoutWeb.API.V2.TransactionController do
   import BlockScoutWeb.PagingHelper,
     only: [paging_options: 2, filter_options: 1, method_filter_options: 1, type_filter_options: 1]
 
-  alias Explorer.Chain
+  alias Explorer.{Chain, Repo}
   alias Explorer.Chain.Import
   alias Explorer.Chain.Import.Runner.InternalTransactions
 
@@ -51,7 +51,8 @@ defmodule BlockScoutWeb.API.V2.TransactionController do
               transaction_hash,
               necessity_by_association: @transaction_necessity_by_association
             )},
-         preloaded <- Chain.preload_token_transfers(transaction, @token_transfers_neccessity_by_association, false) do
+         preloaded <- Chain.preload_token_transfers(transaction, @token_transfers_neccessity_by_association, false),
+         preloaded <- Repo.preload(preloaded, :transaction_actions) do
       conn
       |> put_status(200)
       |> render(:transaction, %{transaction: preloaded})
