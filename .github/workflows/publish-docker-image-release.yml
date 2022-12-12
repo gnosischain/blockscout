@@ -51,8 +51,8 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          cache-from: type=registry,ref=blockscout/blockscout:buildcache
-          cache-to: type=registry,ref=blockscout/blockscout:buildcache,mode=max
+          cache-from: type=registry,ref=gnosischain/blockscout:buildcache
+          cache-to: type=registry,ref=gnosischain/blockscout:buildcache,mode=max
           tags: gnosischain/blockscout:latest, gnosischain/blockscout:${{ steps.commit.outputs.short }}
           platforms: |
             linux/arm64
