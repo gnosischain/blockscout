@@ -42,12 +42,13 @@ jobs:
             ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ env.MIX_ENV }}-deps-
 
       - name: Conditionally build Mix deps cache
-        if: steps.deps-cache.outputs.cache-hit != 'true'
+        # if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
           mix local.hex --force
           mix local.rebar --force
           mix deps.get
           mix deps.compile
+          mix deps.compile ex_keccak
           cd deps/libsecp256k1
           make
 
@@ -61,7 +62,7 @@ jobs:
             ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ env.MIX_ENV }}-explorer-npm-
 
       - name: Conditionally build Explorer NPM Cache
-        if: steps.explorer-npm-cache.outputs.cache-hit != 'true'
+        # if: steps.explorer-npm-cache.outputs.cache-hit != 'true'
         run: npm install
         working-directory: apps/explorer
 
@@ -75,7 +76,7 @@ jobs:
             ${{ runner.os }}-${{ env.ELIXIR_VERSION }}-${{ env.OTP_VERSION }}-${{ env.MIX_ENV }}-blockscoutweb-npm-
 
       - name: Conditionally build Blockscout Web NPM Cache
-        if: steps.blockscoutweb-npm-cache.outputs.cache-hit != 'true'
+        # if: steps.blockscoutweb-npm-cache.outputs.cache-hit != 'true'
         run: npm install
         working-directory: apps/block_scout_web/assets
 
