@@ -3,18 +3,15 @@ name: Blockscout
 on:
   push:
     branches:
-      - master
+      - bicocca-patches
   pull_request:
     branches:
-      - master
+      - bicocca-patches
 
 env:
   MIX_ENV: test
   OTP_VERSION: '24.3.4.1'
   ELIXIR_VERSION: '1.13.4'
-  ACCOUNT_AUTH0_DOMAIN: 'blockscoutcom.us.auth0.com'
-  ACCOUNT_AUTH0_LOGOUT_URL: 'https://blockscoutcom.us.auth0.com/v2/logout'
-  ACCOUNT_AUTH0_LOGOUT_RETURN_URL: 'https://blockscout.com/auth/logout'
 
 jobs:
   build-and-cache:
