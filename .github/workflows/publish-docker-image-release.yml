@@ -57,10 +57,10 @@ jobs:
       #   with:
       #     command: check
 
-      - name: Run `cargo metadata`
-        uses: actions-rs/cargo@v1
-        with:
-          command: metadata
+      # - name: Run `cargo metadata`
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: metadata
         
       - id: commit
         uses: pr-mpt/actions-commit-hash@v2
