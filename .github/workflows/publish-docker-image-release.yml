@@ -42,25 +42,6 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: gnosischain/blockscout
-      
-      # - name: Install Rust
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #       toolchain: 1.62.0
-      #       override: true
-      
-      # - name: Install `rust-src` Rustup Component
-      #   run: rustup component add rust-src
-      
-      # - name: Run `cargo check`
-      #   uses: actions-rs/cargo@v1
-      #   with:
-      #     command: check
-
-      # - name: Run `cargo metadata`
-      #   uses: actions-rs/cargo@v1
-      #   with:
-      #     command: metadata
         
       - id: commit
         uses: pr-mpt/actions-commit-hash@v2
@@ -75,7 +56,6 @@ jobs:
           cache-to: type=registry,ref=gnosischain/blockscout:buildcache,mode=max
           tags: gnosischain/blockscout:latest, gnosischain/blockscout:${{ steps.commit.outputs.short }}
           platforms: |
-            linux/arm64
             linux/amd64
           build-args: |
             CACHE_EXCHANGE_RATES_PERIOD=
