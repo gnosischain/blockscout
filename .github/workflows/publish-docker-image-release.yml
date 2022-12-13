@@ -8,10 +8,10 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - bicocca-patches
+      - master
 
 env:
-  OTP_VERSION: '25.0'
+  OTP_VERSION: '23.3.4.18'
   # OTP_VERSION: '24.3.4.1'
   ELIXIR_VERSION: '1.13.4'
 

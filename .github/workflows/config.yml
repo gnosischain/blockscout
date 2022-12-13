@@ -11,7 +11,7 @@ on:
 env:
   MIX_ENV: test
   # OTP_VERSION: '24.3.4.1'
-  OTP_VERSION: '25.0'
+  OTP_VERSION: '23.3.4.18'
   ELIXIR_VERSION: '1.13.4'
 
 jobs:
@@ -45,6 +45,7 @@ jobs:
       - name: Conditionally build Mix deps cache
         # if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
+          mix deps.clean --all
           mix local.hex --force
           mix local.rebar --force
           mix deps.get
