@@ -23,7 +23,7 @@ $dashboard-stats-item-border-color: $secondary; // stat border
 
 $dashboard-banner-gradient-start: $primary; // gradient begin
 
-$dashboard-banner-gradient-end: lighten($primary, 5); // gradient end
+$dashboard-banner-gradient-end: $primary; // lighten($primary, 5); // gradient end
 
 $dashboard-banner-network-plain-container-background-color: #dcecf3; // stats bg
 
@@ -37,17 +37,17 @@ $header-icon-border-color-hover: $primary;
 
 // buttons
 $btn-line-bg: #fff; // button bg
-$btn-line-color: $primary; // button border and font color && hover bg color
-$btn-copy-color: $primary; // btn copy
-$btn-qr-color: $primary; // btn qr-code
-$btn-address-card-icon-color: $primary; // btn address color
-$btn-contract-color: $primary;
+$btn-line-color: $secondary; // button border and font color && hover bg color
+$btn-copy-color: $secondary; // btn copy
+$btn-qr-color: $secondary; // btn qr-code
+$btn-address-card-icon-color: $secondary; // btn address color
+$btn-contract-color: $secondary;
 
 //links & tile
-$tile-body-a-color: $primary;
-$tile-type-block-color: $primary;
-$tile-type-progress-bar-color: $primary;
-a.tile-title { color: $primary !important; }
+$tile-body-a-color: $secondary;
+$tile-type-block-color: $secondary;
+$tile-type-progress-bar-color: $secondary;
+a.tile-title { color: $secondary !important; }
 
 // card
 $card-background-1: $primary;
