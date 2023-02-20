@@ -48,10 +48,14 @@ $tile-body-a-color: $secondary;
 $tile-type-block-color: $secondary;
 $tile-type-progress-bar-color: $secondary;
 a.tile-title { color: $secondary !important; }
+.tile a { color: $secondary !important; } // links color for badges
+.tile-type-block {
+    border-left: 4px solid $secondary;
+} // tab active bg
 
 // card
-$card-background-1: $primary;
-$card-tab-active: $primary;
+$card-background-1: $secondary;
+$card-tab-active: $secondary;
 
 .layout-container {
 	.dashboard-banner-container {
@@ -74,6 +78,7 @@ $api-text-monospace-color: $primary;
     color: $primary !important;
   }
 }
+
 
 // Dark theme
 $dark-primary: #060607;
