@@ -15,6 +15,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
   alias Explorer.Chain
   alias Explorer.Chain.Block
   alias Explorer.Chain.Cache.{Accounts, Blocks}
+  alias Explorer.Chain.Import.Runner.Blocks, as: BlocksRunner
   alias Indexer.{BufferedTask, Tracer}
   alias Indexer.Fetcher.InternalTransaction.Supervisor, as: InternalTransactionSupervisor
   alias Indexer.Transform.Addresses
@@ -100,13 +101,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
     json_rpc_named_arguments
     |> Keyword.fetch!(:variant)
     |> case do
-      EthereumJSONRPC.Nethermind ->
-        EthereumJSONRPC.fetch_block_internal_transactions(filtered_unique_numbers, json_rpc_named_arguments)
-
-      EthereumJSONRPC.Erigon ->
-        EthereumJSONRPC.fetch_block_internal_transactions(filtered_unique_numbers, json_rpc_named_arguments)
-
-      EthereumJSONRPC.Besu ->
+      variant when variant in [EthereumJSONRPC.Nethermind, EthereumJSONRPC.Erigon, EthereumJSONRPC.Besu] ->
         EthereumJSONRPC.fetch_block_internal_transactions(filtered_unique_numbers, json_rpc_named_arguments)
 
       _ ->
@@ -114,7 +109,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
           fetch_block_internal_transactions_by_transactions(filtered_unique_numbers, json_rpc_named_arguments)
         rescue
           error ->
-            {:error, error}
+            {:error, error, __STACKTRACE__}
         end
     end
     |> case do
@@ -122,7 +117,21 @@ defmodule Indexer.Fetcher.InternalTransaction do
         safe_import_internal_transaction(internal_transactions_params, filtered_unique_numbers)
 
       {:error, reason} ->
-        Logger.error(fn -> ["failed to fetch internal transactions for blocks: ", inspect(reason)] end,
+        Logger.error(
+          fn ->
+            ["failed to fetch internal transactions for blocks: ", Exception.format(:error, reason)]
+          end,
+          error_count: filtered_unique_numbers_count
+        )
+
+        # re-queue the de-duped entries
+        {:retry, filtered_unique_numbers}
+
+      {:error, reason, stacktrace} ->
+        Logger.error(
+          fn ->
+            ["failed to fetch internal transactions for blocks: ", Exception.format(:error, reason, stacktrace)]
+          end,
           error_count: filtered_unique_numbers_count
         )
 
@@ -170,7 +179,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
               EthereumJSONRPC.fetch_internal_transactions(transactions, json_rpc_named_arguments)
             catch
               :exit, error ->
-                {:error, error}
+                {:error, error, __STACKTRACE__}
             end
         end
         |> case do
@@ -275,7 +284,7 @@ defmodule Indexer.Fetcher.InternalTransaction do
   end
 
   defp handle_foreign_key_violation(internal_transactions_params, block_numbers) do
-    Chain.remove_blocks_consensus(block_numbers)
+    BlocksRunner.invalidate_consensus_blocks(block_numbers)
 
     transaction_hashes =
       internal_transactions_params
