@@ -8,7 +8,7 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - bicocca-patches
+      - patches
 
 env:
   OTP_VERSION: '25.2.1'
